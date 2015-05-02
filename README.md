@@ -25,4 +25,15 @@ $app->get('/bar', function () use ($app) {
         ->render($data);
 });
 
+// define a new route using a controller as the callback
+class WidgetController extends \Hrphp\ControllerAbstract
+{
+    public function __invoke()
+    {
+        $this->getApp()->render('Hello, World!');
+    }
+}
+
+$app->get('/widget', new WidgetController($app));
+
 ```
