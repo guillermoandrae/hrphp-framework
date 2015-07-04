@@ -10,6 +10,7 @@ namespace HrphpTest;
 
 use Hrphp\Application;
 use Hrphp\Environment;
+use Hrphp\View;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,6 +65,22 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertRouteAdded($expectedHttpMethod, $expectedPattern, $expectedCallback, $expectedValidationRules);
     }
 
+    public function testSetLayout()
+    {
+        $layout = 'master';
+        $expectedLayout = sprintf('src/application/views/layouts/%s.phtml', $layout);
+        $this->getApplication()->setLayout($expectedLayout);
+        static::assertSame($expectedLayout, $this->getApplication()->getView()->getLayout());
+    }
+
+    public function testSetPartial()
+    {
+        $partial = 'master';
+        $expectedLayout = sprintf('src/application/views/partials/%s.phtml', $partial);
+        $this->getApplication()->setPartial($expectedLayout);
+        static::assertSame($expectedLayout, $this->getApplication()->getView()->getPartial());
+    }
+
     public function getApplication()
     {
         return $this->application;
@@ -87,6 +104,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->application = new Application();
+        $this->application = new Application(new View());
     }
 }

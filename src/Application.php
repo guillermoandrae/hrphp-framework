@@ -21,26 +21,55 @@ namespace Hrphp;
  */
 class Application
 {
+    use ConfigurableTrait;
+
+    /**
+     * @var View
+     */
+    protected $view;
+
     /**
      * @var Environment
      */
-    private $environment;
+    protected $environment;
 
     /**
      * @var array
      */
-    private $routes = [];
+    protected $routes = [];
 
     /**
+     * @param View $view
      * @param Environment $environment
+     * @param array $options
      */
-    public function __construct(Environment $environment = null)
+    public function __construct(View $view, Environment $environment = null, array $options = [])
     {
+        $this->setView($view);
         if (!$environment) {
             $environment = new Environment();
         }
         $this->setEnvironment($environment);
+        if ($options) {
+            $this->setOptions($options);
+        }
         $this->init();
+    }
+
+    /**
+     * @return View
+     */
+    public function getView()
+    {
+        return $this->view;
+    }
+
+    /**
+     * @param View $view
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
     }
 
     /**
@@ -57,6 +86,26 @@ class Application
     public function setEnvironment(Environment $environment)
     {
         $this->environment = $environment;
+    }
+
+    /**
+     * @param string $layout
+     * @return $this
+     */
+    public function setLayout($layout)
+    {
+        $this->getView()->setLayout($layout);
+        return $this;
+    }
+
+    /**
+     * @param string $partial
+     * @return $this
+     */
+    public function setPartial($partial)
+    {
+        $this->getView()->setPartial($partial);
+        return $this;
     }
 
     /**
@@ -114,6 +163,7 @@ class Application
 
     protected function init()
     {
+        Di::set('view', $this->getView());
         Di::set('environment', $this->getEnvironment());
     }
 }
