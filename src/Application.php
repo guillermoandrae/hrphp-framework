@@ -66,10 +66,12 @@ class Application
 
     /**
      * @param View $view
+     * @return $this
      */
     public function setView($view)
     {
         $this->view = $view;
+        return $this;
     }
 
     /**
@@ -82,10 +84,12 @@ class Application
 
     /**
      * @param Environment $environment
+     * @return $this
      */
     public function setEnvironment(Environment $environment)
     {
         $this->environment = $environment;
+        return $this;
     }
 
     /**
